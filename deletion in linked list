@@ -1,0 +1,122 @@
+#include <iostream>
+using namespace std;
+
+class Node
+{
+
+public:
+    int data;
+    Node *next;
+
+    Node(int data) // CONSTRUCTOR
+    {
+        this->data = data;
+        this->next = NULL;
+    }
+    ~Node()
+    {
+        int value = this->data;
+        // memory freeing
+        if (this->next != NULL)
+        {
+            delete next;
+            this->next = NULL;
+        }
+        cout << "Memory freed for value " << value << endl;
+    }
+};
+
+void InsertAtPosition(Node *&head, Node *&tail, int position, int d)
+{
+
+    Node *temp = head;
+    int count = 1;
+    if (position == 1)
+    {
+        InsertAtHead(head, d);
+        return;
+    }
+    while (count < position - 1)
+    {
+        temp = temp->next;
+        count++;
+    }
+    if (temp->next == NULL)
+    {
+        InsertAtTail(tail, d);
+        return;
+    }
+
+    Node *nodetoinsert = new Node(d);
+    nodetoinsert->next = temp->next;
+    temp->next = nodetoinsert;
+}
+
+void DeleteNode(Node *&head, Node *&tail, int position)
+{
+    if (position == 1)
+    {
+        Node *temp = head;
+        head = head->next;
+        temp->next = NULL;
+        delete temp;
+    }
+
+    else
+    {
+
+        Node *curr = head;
+        Node *prev = NULL;
+
+        int count = 1;
+        while (count < position)
+        {
+            prev = curr;
+            curr = curr->next;
+            count++;
+        }
+        prev->next = curr->next;
+        curr->next = NULL;
+        if (prev->next == NULL)
+        {
+            tail = prev;
+        }
+        delete curr;
+    }
+}
+
+void printLL(Node *&head)
+{
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}int main()
+{
+    // created a new node
+    Node *node1 = new Node(10);
+    // cout << node1->data << endl;
+    // cout << node1->next << endl;
+
+    // head pointed to node1
+    Node *head = node1;
+    // Tail pointed to node1
+    Node *tail = node1;
+    printLL(head);
+
+    printLL(head);
+    InsertAtPosition(head, tail, 4, 22);
+    printLL(head);
+    cout << "HEAD -> " << head->data << endl;
+    cout << "TAIL -> " << tail->data << endl;
+
+    DeleteNode(head, tail, 5);
+    printLL(head);
+    cout << "HEAD -> " << head->data << endl;
+    cout << "TAIL -> " << tail->data << endl;
+
+    return 0;
+}
